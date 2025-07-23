@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caccia al Tesoro Sicurezza sul Lavoro</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #EBF8FF 0%, #E0E7FF 100%);
+            min-height: 100vh;
+            padding: 1rem;
+        }
+
+        .container {
+            max-width: 1024px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .title {
+            font-size: 1.75rem;
+            font-weight: bold;
+            color: #1a202c;
+        }
+
+        .stats {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .icon {
+            width: 24px;
+            height: 24px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 16px;
+            background: #e2e8f0;
+            border-radius: 999px;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #6366f1 0%, #8b5cf6 100%);
+            transition: width 0.5s ease;
+        }
+
+        .progress-text {
+            font-size: 0.875rem;
+            color: #64748b;
+        }
+
+        .question-box {
+            background: linear-gradient(135deg, #EEF2FF 0%, #F3E8FF 100%);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .question {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+
+        .option {
+            width: 100%;
+            text-align: left;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .option:hover:not(:disabled) {
+            border-color: #818cf8;
+            background: #f8fafc;
+        }
+
+        .option:disabled {
+            cursor: not-allowed;
+        }
+
+        .option.correct {
+            background: #d1fae5;
+            border-color: #10b981;
+        }
+
+        .option.incorrect {
+            background: #fee2e2;
+            border-color: #ef4444;
+        }
+
+        .option-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .feedback {
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .feedback.correct {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .feedback.incorrect {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .explanation {
+            margin-top: 0.5rem;
+            font-weight: 400;
+            font-size: 0.875rem;
+        }
+
+        .console {
+            background: #1a202c;
+            color: white;
+            border-radius: 0 0 1rem 1rem;
+            padding: 1.5rem;
+            margin-top: -1rem;
+        }
+
+        .console-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .badge-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+        }
+
+        .badge-item {
+            background: #2d3748;
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+        }
+
+        .badge-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .badge-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .badge-icon {
+            font-size: 1.5rem;
+        }
+
+        .badge-name {
+            font-size: 0.875rem;
+            font-weight: 500;
+            text-transform: capitalize;
+        }
+
+        .badge-requirement {
+            font-size: 0.75rem;
+            color: #a0aec0;
+        }
+
+        .badge-progress {
+            width: 100%;
+            height: 8px;
+            background: #4a5568;
+            border-radius: 999px;
+            overflow: hidden;
+            margin-bottom: 0.25rem;
+        }
+
+        .badge-progress-fill {
+            height: 100%;
+            transition: width 0.5s ease;
+        }
+
+        .badge-progress-fill.blue {
+            background: #3b82f6;
+        }
+
+        .badge-progress-fill.yellow {
+            background: #eab308;
+        }
+
+        .badge-progress-fill.green {
+            background: #10b981;
+        }
+
+        .badge-status {
+            font-size: 0.75rem;
+            color: #a0aec0;
+        }
+
+        .console-stats {
+            margin-top: 1rem;
+            font-size: 0.75rem;
+            color: #a0aec0;
+            line-height: 1.5;
+        }
+
+        .completion-screen {
+            text-align: center;
+            padding: 3rem;
+        }
+
+        .trophy {
+            font-size: 6rem;
+            margin-bottom: 1rem;
+            animation: bounce 1s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .final-score {
+            font-size: 2rem;
+            color: #4f46e5;
+            font-weight: bold;
+            margin: 1rem 0;
+        }
+
+        .category-results {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+            text-align: left;
+        }
+
+        .category-result {
+            background: #f8fafc;
+            border-radius: 0.5rem;
+            padding: 1rem;
+        }
+
+        .category-result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .category-result-score {
+            font-weight: bold;
+        }
+
+        .category-result-score.complete {
+            color: #10b981;
+        }
+
+        .unlocked-badges {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .unlocked-badge {
+            padding: 1rem;
+            border-radius: 0.5rem;
+            color: white;
+            text-align: center;
+            transform: scale(1);
+            transition: transform 0.2s;
+        }
+
+        .unlocked-badge:hover {
+            transform: scale(1.05);
+        }
+
+        .badge-emoji {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .btn-restart {
+            background: #6366f1;
+            color: white;
+            padding: 0.75rem 2rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-restart:hover {
+            background: #4f46e5;
+        }
+
+        /* Colori badge */
+        .bg-blue-500 { background: #3b82f6; }
+        .bg-orange-500 { background: #f97316; }
+        .bg-red-500 { background: #ef4444; }
+        .bg-purple-500 { background: #a855f7; }
+        .bg-green-500 { background: #22c55e; }
+        .bg-indigo-500 { background: #6366f1; }
+        .bg-yellow-500 { background: #eab308; }
+        .bg-yellow-600 { background: #ca8a04; }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .stats {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .badge-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .category-results {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="app"></div>
+
+    <script>
+        // Stato dell'applicazione
+        let state = {
+            currentQuestionIndex: 0,
+            score: 0,
+            categoryScores: {
+                ergonomia: { correct: 0, total: 0 },
+                dpi: { correct: 0, total: 0 },
+                emergenza: { correct: 0, total: 0 },
+                sostanze: { correct: 0, total: 0 },
+                attrezzature: { correct: 0, total: 0 },
+                normativa: { correct: 0, total: 0 }
+            },
+            unlockedBadges: [],
+            showFeedback: false,
+            isCorrect: false,
+            gameCompleted: false,
+            selectedAnswer: null,
+            answeredQuestions: []
+        };
+
+        // Badge per categoria
+        const categoryBadges = {
+            ergonomia: { name: "Maestro dell'Ergonomia", icon: "🪑", color: "bg-blue-500" },
+            dpi: { name: "Guardiano dei DPI", icon: "🦺", color: "bg-orange-500" },
+            emergenza: { name: "Eroe delle Emergenze", icon: "🚨", color: "bg-red-500" },
+            sostanze: { name: "Esperto Chimico", icon: "⚗️", color: "bg-purple-500" },
+            attrezzature: { name: "Tecnico Esperto", icon: "🔧", color: "bg-green-500" },
+            normativa: { name: "Giurista della Sicurezza", icon: "📋", color: "bg-indigo-500" }
+        };
+
+        // Badge speciali
+        const specialBadges = [
+            { name: "Primo Passo", icon: "🌟", color: "bg-yellow-500", requirement: "Prima risposta corretta", unlocked: false },
+            { name: "Studioso", icon: "📚", color: "bg-indigo-500", requirement: "10 risposte corrette totali", unlocked: false },
+            { name: "Esperto", icon: "🎓", color: "bg-purple-500", requirement: "20 risposte corrette totali", unlocked: false },
+            { name: "Maestro della Sicurezza", icon: "👑", color: "bg-yellow-600", requirement: "Tutti i badge categoria sbloccati", unlocked: false }
+        ];
+
+        // Domande
+        const questions = [
+            // ERGONOMIA
+            {
+                id: 1,
+                category: "ergonomia",
+                question: "Un lavoratore lamenta dolori cervicali dopo 3 mesi di smart working. Quale combinazione di fattori potrebbe essere la causa principale?",
+                options: [
+                    "Schermo posizionato troppo in basso + sedia senza supporto lombare + pause insufficienti",
+                    "Troppa illuminazione naturale + tastiera wireless + mouse ergonomico",
+                    "Orario di lavoro flessibile + temperatura ambiente di 22°C + scrivania regolabile",
+                    "Connessione internet lenta + riunioni frequenti + caffè di scarsa qualità"
+                ],
+                correctAnswer: 0,
+                explanation: "La postura scorretta data da schermo basso e sedia inadeguata, unite a pause insufficienti, sono le principali cause di problemi cervicali nel lavoro da remoto."
+            },
+            {
+                id: 2,
+                category: "ergonomia",
+                question: "Secondo la normativa, quale deve essere la distanza ottimale tra occhi e monitor per prevenire l'affaticamento visivo, considerando anche l'angolo di visione?",
+                options: [
+                    "30-40 cm con angolo di 90°",
+                    "50-70 cm con la parte superiore del monitor all'altezza degli occhi",
+                    "80-100 cm con monitor inclinato di 45°",
+                    "40-50 cm con illuminazione posteriore al monitor"
+                ],
+                correctAnswer: 1,
+                explanation: "La distanza ottimale è 50-70 cm con il bordo superiore del monitor all'altezza degli occhi per mantenere una postura naturale del collo."
+            },
+            {
+                id: 3,
+                category: "ergonomia",
+                question: "Un ufficio open space presenta problemi di produttività. L'analisi ergonomica rileva rumore di fondo a 65 dB. Quale soluzione integrata è più efficace?",
+                options: [
+                    "Installare solo pannelli fonoassorbenti al soffitto",
+                    "Fornire cuffie antirumore a tutti i dipendenti",
+                    "Combinare pannelli divisori, aree silent room e politiche di quiet hours",
+                    "Aumentare la musica di sottofondo per coprire le conversazioni"
+                ],
+                correctAnswer: 2,
+                explanation: "Un approccio integrato che combina soluzioni strutturali (pannelli), spazi dedicati e politiche aziendali è più efficace di singole misure isolate."
+            },
+            {
+                id: 4,
+                category: "ergonomia",
+                question: "Durante il sollevamento manuale di carichi, quale sequenza di movimenti minimizza il rischio di infortunio lombare?",
+                options: [
+                    "Piegare la schiena → afferrare → sollevare rapidamente → ruotare il busto",
+                    "Valutare il peso → posizionarsi vicino → piegare le ginocchia → sollevare con la schiena dritta",
+                    "Afferrare con una mano → sollevare di lato → trasferire il peso all'altra mano",
+                    "Inspirare profondamente → trattenere il respiro → sollevare → espirare alla fine"
+                ],
+                correctAnswer: 1,
+                explanation: "La sequenza corretta prevede valutazione, posizionamento appropriato e uso delle gambe mantenendo la schiena dritta."
+            },
+            {
+                id: 5,
+                category: "ergonomia",
+                question: "In un magazzino, quale combinazione di fattori determina il peso massimo sollevabile secondo il metodo NIOSH?",
+                options: [
+                    "Solo il peso dell'oggetto e la forza del lavoratore",
+                    "Peso, distanza orizzontale, altezza di presa, distanza di trasporto, frequenza, presa e asimmetria",
+                    "Temperatura ambiente e umidità relativa",
+                    "Età del lavoratore e anni di esperienza"
+                ],
+                correctAnswer: 1,
+                explanation: "Il metodo NIOSH considera molteplici fattori biomeccanici per calcolare il limite di peso raccomandato in modo scientifico."
+            },
+            {
+                id: 6,
+                category: "ergonomia",
+                question: "Un'azienda registra un aumento del 40% di disturbi muscoloscheletrici. Quale strategia preventiva ha il miglior rapporto costo-efficacia a lungo termine?",
+                options: [
+                    "Assumere un fisioterapista aziendale a tempo pieno",
+                    "Distribuire buoni per massaggi mensili",
+                    "Implementare un programma di formazione ergonomica con ridisegno delle postazioni",
+                    "Installare distributori di antidolorifici negli spogliatoi"
+                ],
+                correctAnswer: 2,
+                explanation: "La formazione combinata con il ridisegno ergonomico affronta le cause alla radice, non solo i sintomi."
+            },
+            // DPI
+            {
+                id: 7,
+                category: "dpi",
+                question: "Un lavoratore deve entrare in uno spazio confinato con possibile presenza di H2S (idrogeno solforato). Quale combinazione di DPI è essenziale?",
+                options: [
+                    "Maschera antipolvere FFP2 + guanti in lattice + scarpe antinfortunistiche",
+                    "Autorespiratore + rilevatore di gas + imbracatura con corda di recupero + comunicazione",
+                    "Casco con visiera + tuta in Tyvek + stivali in gomma",
+                    "Maschera con filtri A2B2E2K2 + occhiali a mascherina"
+                ],
+                correctAnswer: 1,
+                explanation: "L'H2S è letale anche a basse concentrazioni. Serve protezione respiratoria autonoma e sistemi di recupero d'emergenza."
+            },
+            {
+                id: 8,
+                category: "dpi",
+                question: "Durante la saldatura TIG su acciaio inox, quali DPI proteggono dai rischi specifici di questo processo?",
+                options: [
+                    "Maschera da saldatura autodarkening + guanti in crosta + grembiule in cuoio + protezione respiratoria per fumi di cromo",
+                    "Occhiali scuri + guanti in cotone + camice ignifugo",
+                    "Casco integrale + tuta aluminizzata + guanti criogenici",
+                    "Visiera in policarbonato + guanti in nitrile + scarpe isolanti"
+                ],
+                correctAnswer: 0,
+                explanation: "La saldatura TIG su inox produce radiazioni UV intense e fumi di cromo esavalente cancerogeno, richiedendo protezioni specifiche."
+            },
+            {
+                id: 9,
+                category: "dpi",
+                question: "Un tecnico deve lavorare su una linea elettrica in tensione a 20kV. Oltre ai DPI isolanti, quale procedura è obbligatoria?",
+                options: [
+                    "Indossare scarpe con suola in gomma",
+                    "Verificare l'assenza di tensione con un tester",
+                    "Test di isolamento dei DPI prima dell'uso + procedura di lavoro sotto tensione autorizzata",
+                    "Spruzzare spray isolante sui guanti"
+                ],
+                correctAnswer: 2,
+                explanation: "I lavori sotto tensione richiedono DPI certificati per la specifica tensione e testati, oltre a procedure autorizzate."
+            },
+            {
+                id: 10,
+                category: "dpi",
+                question: "In presenza di rumore a 95 dB(A) per 8 ore, quale protezione uditiva garantisce la conformità ai limiti di esposizione?",
+                options: [
+                    "Tappi auricolari con SNR 15 dB",
+                    "Cuffie con SNR 25 dB o tappi con SNR 20 dB, considerando il fattore di protezione reale",
+                    "Doppia protezione: tappi + cuffie sempre",
+                    "Cuffie elettroniche con cancellazione attiva del rumore"
+                ],
+                correctAnswer: 1,
+                explanation: "Con 95 dB(A) serve una protezione che porti sotto gli 87 dB(A). Considerando l'efficacia reale (circa 70% del SNR), servono almeno 20-25 dB di attenuazione."
+            },
+            {
+                id: 11,
+                category: "dpi",
+                question: "Quale caratteristica dei guanti determina la scelta corretta per manipolare acido solforico concentrato?",
+                options: [
+                    "Spessore superiore a 2 mm",
+                    "Certificazione EN 374 con resistenza chimica specifica per H2SO4 + tempo di permeazione",
+                    "Colore giallo ad alta visibilità",
+                    "Fodera interna in cotone per il comfort"
+                ],
+                correctAnswer: 1,
+                explanation: "La norma EN 374 classifica la resistenza chimica specifica. Il tempo di permeazione è cruciale per acidi forti."
+            },
+            {
+                id: 12,
+                category: "dpi",
+                question: "Un lavoratore rifiuta di indossare l'imbracatura anticaduta perché 'rallenta il lavoro'. Quale approccio è più efficace e conforme?",
+                options: [
+                    "Minacciare il licenziamento immediato",
+                    "Permettere il lavoro senza DPI se firma una liberatoria",
+                    "Formazione sui rischi reali + coinvolgimento nella scelta di DPI più comodi + supervisione",
+                    "Installare reti di sicurezza ovunque per evitare l'uso dell'imbracatura"
+                ],
+                correctAnswer: 2,
+                explanation: "L'approccio educativo-partecipativo è più efficace. Il datore non può permettere lavori non sicuri, nemmeno con liberatorie."
+            },
+            // EMERGENZA
+            {
+                id: 13,
+                category: "emergenza",
+                question: "Durante un'evacuazione, trovate una persona in carrozzina al terzo piano. L'ascensore è bloccato per sicurezza. Qual è la procedura corretta?",
+                options: [
+                    "Dire alla persona di attendere i soccorsi mentre tutti evacuano",
+                    "Tentare di portare la carrozzina giù per le scale",
+                    "Utilizzare l'area di attesa sicura + segnalare ai soccorritori + assistere se addestrati all'evacuazione assistita",
+                    "Riattivare l'ascensore solo per questa emergenza"
+                ],
+                correctAnswer: 2,
+                explanation: "Le aree di attesa sicura sono compartimentate per permettere l'evacuazione assistita in sicurezza da parte di personale formato."
+            },
+            {
+                id: 14,
+                category: "emergenza",
+                question: "Un piccolo incendio si sviluppa nel quadro elettrico. La corrente è ancora attiva. Quale sequenza di azioni è corretta?",
+                options: [
+                    "Gettare acqua immediatamente per spegnere le fiamme",
+                    "Tentare di staccare la corrente → usare estintore CO2 → evacuare se non controllabile → chiamare i soccorsi",
+                    "Usare l'estintore a polvere più vicino",
+                    "Chiudere la porta e evacuare immediatamente"
+                ],
+                correctAnswer: 1,
+                explanation: "La sequenza corretta prevede l'interruzione dell'alimentazione se possibile e l'uso di estintori idonei per fuochi elettrici (CO2)."
+            },
+            {
+                id: 15,
+                category: "emergenza",
+                question: "Durante un terremoto, siete al quarto piano di un edificio. Quale comportamento riduce maggiormente il rischio?",
+                options: [
+                    "Correre immediatamente verso le scale",
+                    "Saltare dalla finestra su un albero vicino",
+                    "Ripararsi sotto un tavolo robusto lontano da finestre, attendere la fine della scossa principale",
+                    "Usare l'ascensore per scendere velocemente"
+                ],
+                correctAnswer: 2,
+                explanation: "Durante la scossa bisogna proteggersi da cadute di oggetti. L'evacuazione avviene solo dopo, usando le scale."
+            },
+            {
+                id: 16,
+                category: "emergenza",
+                question: "Un collega perde conoscenza dopo aver inalato vapori in laboratorio. Quale priorità nella sequenza di soccorso?",
+                options: [
+                    "Praticare immediatamente la respirazione bocca a bocca",
+                    "Sicurezza del soccorritore → allontanare la vittima dall'area → valutare ABC → chiamare 112",
+                    "Somministrare ossigeno dalla bombola più vicina",
+                    "Dare schiaffi per risvegliare la persona"
+                ],
+                correctAnswer: 1,
+                explanation: "La sicurezza del soccorritore è prioritaria. Mai entrare in ambienti con vapori tossici senza protezioni adeguate."
+            },
+            {
+                id: 17,
+                category: "emergenza",
+                question: "Il piano di emergenza aziendale deve essere testato con esercitazioni. Quale frequenza minima è più efficace per mantenere la preparazione?",
+                options: [
+                    "Una volta all'anno solo per obbligo normativo",
+                    "Solo quando ci sono nuovi assunti",
+                    "Almeno 2 volte l'anno + esercitazioni mirate per scenari specifici + debriefing",
+                    "Ogni 5 anni con esercitazione generale"
+                ],
+                correctAnswer: 2,
+                explanation: "Esercitazioni regolari con scenari diversificati e analisi post-evento mantengono alta la preparazione e identificano aree di miglioramento."
+            },
+            {
+                id: 18,
+                category: "emergenza",
+                question: "Durante l'evacuazione, il responsabile del punto di raccolta nota che mancano 3 persone. Qual è l'azione corretta?",
+                options: [
+                    "Rientrare personalmente per cercarle",
+                    "Attendere 10 minuti poi dare per dispersi",
+                    "Comunicare ai soccorritori identità e ultima posizione nota + verificare registri accessi",
+                    "Assumere che siano già uscite da un'altra parte"
+                ],
+                correctAnswer: 2,
+                explanation: "Mai rientrare. Fornire informazioni precise ai soccorritori professionisti permette ricerche mirate e sicure."
+            },
+            // SOSTANZE PERICOLOSE
+            {
+                id: 19,
+                category: "sostanze",
+                question: "Un fusto presenta questa etichetta: teschio su tibie incrociate + pesce e albero morti. Quale combinazione di precauzioni è necessaria?",
+                options: [
+                    "Solo guanti perché è tossico",
+                    "Protezione completa per tossicità acuta + misure ambientali per ecotossicità + gestione rifiuti speciali",
+                    "Normale manipolazione con cautela",
+                    "Conservazione in frigorifero per ridurre i vapori"
+                ],
+                correctAnswer: 1,
+                explanation: "I simboli indicano tossicità acuta elevata (teschio) e pericolo ambientale (ecotossico), richiedendo protezioni complete e gestione speciale."
+            },
+            {
+                id: 20,
+                category: "sostanze",
+                question: "La scheda di sicurezza indica: 'R45 - Può provocare il cancro' e 'R46 - Può provocare alterazioni genetiche'. Quale misura ha priorità assoluta?",
+                options: [
+                    "Usare DPI di altissima qualità",
+                    "Sostituire con alternative non CMR o implementare ciclo chiuso + monitoraggio biologico",
+                    "Limitare l'uso a personale esperto",
+                    "Aumentare la ventilazione generale"
+                ],
+                correctAnswer: 1,
+                explanation: "Le sostanze CMR (Cancerogene, Mutagene, Reprotossiche) richiedono prioritariamente sostituzione o sistemi chiusi per eliminare l'esposizione."
+            },
+            {
+                id: 21,
+                category: "sostanze",
+                question: "Due sostanze incompatibili (acido e base forti) sono state accidentalmente mescolate. Si sviluppa una reazione esotermica con vapori. Quale azione immediata?",
+                options: [
+                    "Aggiungere acqua per diluire",
+                    "Neutralizzare aggiungendo altro acido",
+                    "Evacuare l'area → ventilare → intervento specializzato con protezioni adeguate",
+                    "Coprire con un coperchio per contenere i vapori"
+                ],
+                correctAnswer: 2,
+                explanation: "Le reazioni esotermiche possono accelerare con l'acqua. L'evacuazione e l'intervento specializzato sono prioritari."
+            },
+            {
+                id: 22,
+                category: "sostanze",
+                question: "Il valore limite di esposizione (TLV-TWA) del benzene è 0,5 ppm. Un monitoraggio mostra 0,3 ppm. Quale considerazione è corretta?",
+                options: [
+                    "Siamo sotto il limite quindi non serve fare nulla",
+                    "Il benzene è cancerogeno: applicare principio ALARA per ridurre al minimo l'esposizione",
+                    "Basta aumentare i ricambi d'aria del 50%",
+                    "Fornire maschere solo a chi supera 0,5 ppm"
+                ],
+                correctAnswer: 1,
+                explanation: "Per i cancerogeni non esiste soglia sicura. Il principio ALARA (As Low As Reasonably Achievable) richiede la minimizzazione dell'esposizione."
+            },
+            {
+                id: 23,
+                category: "sostanze",
+                question: "Un lavoratore deve preparare una soluzione diluita di acido cloridrico. Quale procedura previene il rischio maggiore?",
+                options: [
+                    "Versare rapidamente per finire prima",
+                    "Aggiungere sempre l'acido all'acqua lentamente, mai il contrario + sotto cappa",
+                    "Mescolare in contenitore chiuso per evitare vapori",
+                    "Usare acqua calda per accelerare la dissoluzione"
+                ],
+                correctAnswer: 1,
+                explanation: "Aggiungere acqua all'acido concentrato causa violenta reazione esotermica con schizzi. Sempre acido in acqua, lentamente."
+            },
+            {
+                id: 24,
+                category: "sostanze",
+                question: "Lo stoccaggio di prodotti chimici richiede segregazione. Quali sostanze NON devono MAI essere conservate insieme?",
+                options: [
+                    "Acidi e basi perché hanno pH diversi",
+                    "Liquidi e solidi per praticità",
+                    "Ossidanti forti e materiali combustibili/infiammabili per rischio incendio/esplosione",
+                    "Prodotti di marche diverse"
+                ],
+                correctAnswer: 2,
+                explanation: "Ossidanti + combustibili possono causare incendi violenti o esplosioni anche senza innesco esterno."
+            },
+            // ATTREZZATURE
+            {
+                id: 25,
+                category: "attrezzature",
+                question: "Prima di utilizzare una pressa idraulica da 100 tonnellate, quale verifica ha priorità assoluta per la sicurezza?",
+                options: [
+                    "Controllo del livello dell'olio idraulico",
+                    "Funzionamento dei dispositivi di sicurezza (fotocellule, doppio comando, arresto emergenza)",
+                    "Pulizia del piano di lavoro",
+                    "Verifica della pressione dei pneumatici del carrello"
+                ],
+                correctAnswer: 1,
+                explanation: "I dispositivi di sicurezza prevengono schiacciamenti mortali. La loro verifica è prioritaria rispetto alla manutenzione ordinaria."
+            },
+            {
+                id: 26,
+                category: "attrezzature",
+                question: "Un operatore deve sostituire la lama di una sega circolare. Quale sequenza garantisce la sicurezza?",
+                options: [
+                    "Spegnere → sostituire rapidamente → riaccendere",
+                    "Lockout/tagout → verifica energia zero → attrezzi idonei → montaggio corretto → test a vuoto",
+                    "Sostituire con macchina a velocità minima",
+                    "Chiedere a un collega di tenere premuto il pulsante di arresto"
+                ],
+                correctAnswer: 1,
+                explanation: "Il lockout/tagout con verifica energia zero previene avviamenti accidentali durante la manutenzione, causa frequente di infortuni gravi."
+            },
+            {
+                id: 27,
+                category: "attrezzature",
+                question: "Un carrello elevatore presenta perdite d'olio e le forche sono leggermente piegate. L'operatore dice 'funziona ancora'. Quale decisione?",
+                options: [
+                    "Continuare a usarlo con cautela extra",
+                    "Usarlo solo per carichi leggeri",
+                    "Messa fuori servizio immediata + manutenzione specializzata + verifica strutturale",
+                    "Riparare in autonomia per risparmiare tempo"
+                ],
+                correctAnswer: 2,
+                explanation: "Perdite idrauliche e deformazioni strutturali possono causare cedimenti improvvisi. Il carrello deve essere riparato da personale qualificato."
+            },
+            {
+                id: 28,
+                category: "attrezzature",
+                question: "Durante l'uso di una smerigliatrice angolare, quale combinazione di fattori causa più frequentemente infortuni gravi?",
+                options: [
+                    "Rumore eccessivo e vibrazioni",
+                    "Rimozione del carter + uso di dischi non idonei + postura scorretta",
+                    "Temperatura del motore elevata",
+                    "Cavo di alimentazione troppo corto"
+                ],
+                correctAnswer: 1,
+                explanation: "La rimozione delle protezioni e l'uso di dischi inadatti sono le principali cause di rottura del disco con proiezione di frammenti."
+            },
+            {
+                id: 29,
+                category: "attrezzature",
+                question: "Un tornio CNC presenta anomalie: vibrazioni insolite e tolleranze fuori specifica. Quale indagine prioritaria?",
+                options: [
+                    "Controllare il programma CNC per errori",
+                    "Verificare l'usura dei cuscinetti del mandrino + allineamento + fissaggio pezzo",
+                    "Aumentare la velocità per compensare",
+                    "Cambiare il refrigerante"
+                ],
+                correctAnswer: 1,
+                explanation: "Vibrazioni anomale indicano spesso problemi meccanici (cuscinetti, allineamento) che possono causare rotture pericolose se ignorati."
+            },
+            {
+                id: 30,
+                category: "attrezzature",
+                question: "La normativa richiede verifiche periodiche per apparecchi di sollevamento. Quale affermazione è corretta?",
+                options: [
+                    "Basta l'autocertificazione del datore di lavoro",
+                    "Solo quando si notano problemi evidenti",
+                    "Verifiche annuali da ente accreditato + registro controlli + manutenzione programmata",
+                    "Ogni 5 anni se usati raramente"
+                ],
+                correctAnswer: 2,
+                explanation: "Le verifiche periodiche obbligatorie da enti accreditati garantiscono l'idoneità strutturale nel tempo degli apparecchi di sollevamento."
+            }
+        ];
+
+        // Funzioni helper
+        function getProgressForCategory(category) {
+            const scores = state.categoryScores[category];
+            const progress = scores.total > 0 ? (scores.correct / 5) * 100 : 0;
+            return Math.min(progress, 100);
+        }
+
+        function getCategoryIcon(category) {
+            const icons = {
+                ergonomia: '👥',
+                dpi: '🛡️',
+                emergenza: '⚠️',
+                sostanze: '⚡',
+                attrezzature: '⚙️',
+                normativa: '📄'
+            };
+            return icons[category] || '📋';
+        }
+
+        function handleAnswer(answerIndex) {
+            if (state.showFeedback) return;
+            
+            state.selectedAnswer = answerIndex;
+            const currentQuestion = questions[state.currentQuestionIndex];
+            const correct = answerIndex === currentQuestion.correctAnswer;
+            state.isCorrect = correct;
+            state.showFeedback = true;
+
+            // Aggiorna punteggi
+            state.categoryScores[currentQuestion.category].total += 1;
+            if (correct) {
+                state.score += 10;
+                state.categoryScores[currentQuestion.category].correct += 1;
+                
+                // Controlla badge speciali
+                const totalCorrect = Object.values(state.categoryScores).reduce((sum, cat) => sum + cat.correct, 0);
+                
+                if (totalCorrect === 1 && !specialBadges[0].unlocked) {
+                    specialBadges[0].unlocked = true;
+                    state.unlockedBadges.push(specialBadges[0]);
+                }
+                if (totalCorrect === 10 && !specialBadges[1].unlocked) {
+                    specialBadges[1].unlocked = true;
+                    state.unlockedBadges.push(specialBadges[1]);
+                }
+                if (totalCorrect === 20 && !specialBadges[2].unlocked) {
+                    specialBadges[2].unlocked = true;
+                    state.unlockedBadges.push(specialBadges[2]);
+                }
+            }
+
+            // Controlla badge di categoria
+            const category = currentQuestion.category;
+            if (state.categoryScores[category].correct >= 5 && state.categoryScores[category].total >= 5) {
+                const categoryBadge = categoryBadges[category];
+                if (!state.unlockedBadges.find(b => b.name === categoryBadge.name)) {
+                    state.unlockedBadges.push(categoryBadge);
+                    
+                    // Controlla se ha tutti i badge categoria
+                    const allCategoryBadges = Object.keys(categoryBadges).every(cat => 
+                        state.categoryScores[cat].correct >= 5
+                    );
+                    if (allCategoryBadges && !specialBadges[3].unlocked) {
+                        specialBadges[3].unlocked = true;
+                        state.unlockedBadges.push(specialBadges[3]);
+                    }
+                }
+            }
+
+            render();
+
+            setTimeout(() => {
+                if (state.currentQuestionIndex < questions.length - 1) {
+                    state.currentQuestionIndex++;
+                    state.showFeedback = false;
+                    state.selectedAnswer = null;
+                } else {
+                    state.gameCompleted = true;
+                }
+                render();
+            }, 3500);
+        }
+
+        function restartGame() {
+            state = {
+                currentQuestionIndex: 0,
+                score: 0,
+                categoryScores: {
+                    ergonomia: { correct: 0, total: 0 },
+                    dpi: { correct: 0, total: 0 },
+                    emergenza: { correct: 0, total: 0 },
+                    sostanze: { correct: 0, total: 0 },
+                    attrezzature: { correct: 0, total: 0 },
+                    normativa: { correct: 0, total: 0 }
+                },
+                unlockedBadges: [],
+                showFeedback: false,
+                isCorrect: false,
+                gameCompleted: false,
+                selectedAnswer: null,
+                answeredQuestions: []
+            };
+            specialBadges.forEach(badge => badge.unlocked = false);
+            render();
+        }
+
+        function render() {
+            const app = document.getElementById('app');
+            
+            if (state.gameCompleted) {
+                app.innerHTML = `
+                    <div class="container">
+                        <div class="card completion-screen">
+                            <div class="trophy">🏆</div>
+                            <h1 class="title">Percorso Completato! 🎉</h1>
+                            <p class="final-score">Punteggio Finale: ${state.score}/300</p>
+                            
+                            <h2 class="title" style="font-size: 1.5rem; margin-top: 2rem;">Risultati per Categoria</h2>
+                            <div class="category-results">
+                                ${Object.entries(state.categoryScores).map(([category, scores]) => `
+                                    <div class="category-result">
+                                        <div class="category-result-header">
+                                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                                <span>${getCategoryIcon(category)}</span>
+                                                <span style="text-transform: capitalize; font-weight: 600;">${category}</span>
+                                            </div>
+                                            <span class="category-result-score ${scores.correct >= 5 ? 'complete' : ''}">
+                                                ${scores.correct}/6
+                                            </span>
+                                        </div>
+                                        <div style="font-size: 0.875rem; color: #64748b;">
+                                            ${scores.correct >= 5 ? '✅ Badge sbloccato!' : `Servono ancora ${5 - scores.correct} risposte corrette`}
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+
+                            <h2 class="title" style="font-size: 1.5rem; margin-top: 2rem;">Badge Conquistati (${state.unlockedBadges.length})</h2>
+                            <div class="unlocked-badges">
+                                ${state.unlockedBadges.map(badge => `
+                                    <div class="unlocked-badge ${badge.color}">
+                                        <div class="badge-emoji">${badge.icon}</div>
+                                        <div style="font-weight: 600;">${badge.name}</div>
+                                    </div>
+                                `).join('')}
+                            </div>
+
+                            <button class="btn-restart" onclick="restartGame()">Ricomincia il Percorso</button>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
+            const progress = ((state.currentQuestionIndex + 1) / questions.length) * 100;
+            const currentQuestion = questions[state.currentQuestionIndex];
+
+            app.innerHTML = `
+                <div class="container">
+                    <div class="card" style="border-radius: 1rem 1rem 0 0;">
+                        <div class="header">
+                            <h1 class="title">Percorso Formativo Sicurezza</h1>
+                            <div class="stats">
+                                <div class="stat-item">
+                                    <span>🏆</span>
+                                    <span>${state.score} punti</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span>🏅</span>
+                                    <span>${state.unlockedBadges.length} badge</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${progress}%"></div>
+                        </div>
+                        <p class="progress-text">
+                            Domanda ${state.currentQuestionIndex + 1} di ${questions.length} - Categoria: <span style="font-weight: 600; text-transform: capitalize;">${currentQuestion.category}</span>
+                        </p>
+                    </div>
+
+                    <div class="card" style="border-radius: 0; margin-top: -1px;">
+                        <div class="question-box">
+                            <div class="question">
+                                <span>${getCategoryIcon(currentQuestion.category)}</span>
+                                <span>${currentQuestion.question}</span>
+                            </div>
+                            
+                            <div>
+                                ${currentQuestion.options.map((option, index) => `
+                                    <button 
+                                        class="option ${
+                                            state.showFeedback && index === currentQuestion.correctAnswer ? 'correct' : ''
+                                        } ${
+                                            state.showFeedback && index === state.selectedAnswer && !state.isCorrect ? 'incorrect' : ''
+                                        }"
+                                        onclick="handleAnswer(${index})"
+                                        ${state.showFeedback ? 'disabled' : ''}
+                                    >
+                                        <div class="option-content">
+                                            <span>${option}</span>
+                                            ${state.showFeedback && index === currentQuestion.correctAnswer ? '<span>✓</span>' : ''}
+                                            ${state.showFeedback && index === state.selectedAnswer && !state.isCorrect ? '<span>✗</span>' : ''}
+                                        </div>
+                                    </button>
+                                `).join('')}
+                            </div>
+                        </div>
+
+                        ${state.showFeedback ? `
+                            <div class="feedback ${state.isCorrect ? 'correct' : 'incorrect'}">
+                                <div>${state.isCorrect ? '✅ Ottimo lavoro!' : '❌ Non esatto.'}</div>
+                                <div class="explanation">${currentQuestion.explanation}</div>
+                            </div>
+                        ` : ''}
+                    </div>
+
+                    <div class="console">
+                        <div class="console-header">
+                            <span>📊</span>
+                            <span>Console Progressione Badge</span>
+                        </div>
+                        
+                        <div class="badge-grid">
+                            ${Object.entries(categoryBadges).map(([category, badge]) => {
+                                const scores = state.categoryScores[category];
+                                const progress = getProgressForCategory(category);
+                                const hasUnlocked = state.unlockedBadges.find(b => b.name === badge.name);
+                                
+                                return `
+                                    <div class="badge-item">
+                                        <div class="badge-header">
+                                            <div class="badge-info">
+                                                <span class="badge-icon">${badge.icon}</span>
+                                                <span class="badge-name">${category}</span>
+                                            </div>
+                                            <span class="badge-requirement">
+                                                ${scores.correct}/5 per sbloccare
+                                            </span>
+                                        </div>
+                                        
+                                        <div class="badge-progress">
+                                            <div 
+                                                class="badge-progress-fill ${
+                                                    hasUnlocked ? 'green' : progress > 60 ? 'yellow' : 'blue'
+                                                }"
+                                                style="width: ${progress}%"
+                                            ></div>
+                                        </div>
+                                        
+                                        <div class="badge-status">
+                                            ${hasUnlocked 
+                                                ? '✅ Badge sbloccato!' 
+                                                : `${scores.total}/6 domande, ${scores.correct} corrette`
+                                            }
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                        
+                        <div class="console-stats">
+                            <p>📊 Risposte corrette totali: ${Object.values(state.categoryScores).reduce((sum, cat) => sum + cat.correct, 0)}/30</p>
+                            <p>🎯 Badge categoria: ${Object.values(state.categoryScores).filter(cat => cat.correct >= 5).length}/6</p>
+                            <p>⭐ Badge speciali: ${state.unlockedBadges.filter(b => specialBadges.find(sb => sb.name === b.name)).length}/${specialBadges.length}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Inizializza l'app
+        render();
+    </script>
+</body>
+</html>
